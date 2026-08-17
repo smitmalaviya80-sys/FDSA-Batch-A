@@ -12,7 +12,7 @@ void printArray(int arr[], int n)
 
 void bubbleSort(int arr[], int n)
 {
-    //compare two adjesent element then swap it
+    // compare two adjacent elements then swap if out of order
     for (int i = 0; i < n - 1; i++)
     {
         for (int j = 0; j < n - i - 1; j++)
@@ -31,29 +31,32 @@ void selectionSort(int arr[], int n)
 {
     for (int i = 0; i < n - 1; i++)
     {
-        //find min eleent and add front of the arry
-        int min = arr[i];
+        // find index of min element in remaining unsorted part
+        int minIndex = i;
 
         for (int j = i + 1; j < n; j++)
         {
-            if (arr[j] < min)
+            if (arr[j] < arr[minIndex])
             {
-                min= arr[j];
+                minIndex = j;
             }
         }
 
-        int temp = arr[i];
-        arr[i] = min;
-        min = temp;
+        // swap the found min element with the first unsorted element
+        if (minIndex != i)
+        {
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        }
     }
 }
 
 void insertionSort(int arr[], int n)
 {
-    //consider first element of shorted and start comparing secound element
-    //here compare previous element of arry not a next element 
-    //if the previous element is smaller than current till comparing stop and copy element of previous to current and 
-    //end of comparing key store small element when j==0
+    // consider first element as sorted, start comparing from second element
+    // compare with previous elements (not next); shift larger elements right
+    // until correct position found (j == -1 or arr[j] <= key), then insert key
     for (int i = 1; i < n; i++)
     {
         int key = arr[i];
@@ -76,31 +79,24 @@ int main()
     cout << "Enter number of students: ";
     cin >> n;
 
-    int arr[100] ,arr1[100] ,arr2[100];
+    int arr[100], arr1[100], arr2[100];
 
-    cout << "Enter marks:";
+    cout << "Enter marks: ";
 
     for (int i = 0; i < n; i++)
     {
         cin >> arr[i];
-
-        arr1[i]=arr[i];
-        arr2[i]=arr[i];
-
-        
+        arr1[i] = arr[i];
+        arr2[i] = arr[i];
     }
 
     bubbleSort(arr, n);
-   
     printArray(arr, n);
 
     selectionSort(arr1, n);
-   
     printArray(arr1, n);
 
-   
     insertionSort(arr2, n);
-   
     printArray(arr2, n);
 
     return 0;

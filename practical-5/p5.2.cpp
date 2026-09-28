@@ -3,21 +3,25 @@ using namespace std;
 
 class SNode {
 public:
-    int data;
+    string name;
     SNode* next;
 
-    SNode(int value) {
-        data = value;
+    SNode(string n) {
+        name = n;
         next = NULL;
     }
 };
 
 class SinglyCircular {
+    SNode* head;
+
 public:
-    SNode* head = NULL;
+    SinglyCircular() {
+        head = NULL;
+    }
 
-    void insertBeginning(int value) {
-        SNode* newNode = new SNode(value);
+    void join(string name) {
+        SNode* newNode = new SNode(name);
 
         if (head == NULL) {
             head = newNode;
@@ -26,26 +30,6 @@ public:
         }
 
         SNode* temp = head;
-
-        while (temp->next != head)
-            temp = temp->next;
-
-        newNode->next = head;
-        temp->next = newNode;
-        head = newNode;
-    }
-
-    void insertEnd(int value) {
-        SNode* newNode = new SNode(value);
-
-        if (head == NULL) {
-            head = newNode;
-            newNode->next = head;
-            return;
-        }
-
-        SNode* temp = head;
-
         while (temp->next != head)
             temp = temp->next;
 
@@ -53,45 +37,18 @@ public:
         newNode->next = head;
     }
 
-    void insertAfter(int x, int value) {
-        if (head == NULL) {
-            cout << "Circle is empty\n";
+    void leave(string name) {
+        if (head == NULL)
             return;
-        }
 
-        SNode* temp = head;
-
-        do {
-            if (temp->data == x) {
-                SNode* newNode = new SNode(value);
-                newNode->next = temp->next;
-                temp->next = newNode;
+        if (head->name == name) {
+            if (head->next == head) {
+                delete head;
+                head = NULL;
                 return;
             }
 
-            temp = temp->next;
-        } while (temp != head);
-
-        cout << "Student not found\n";
-    }
-
-    void removeStudent(int value) {
-        if (head == NULL) {
-            cout << "Circle is empty\n";
-            return;
-        }
-
-        if (head->next == head) {
-            if (head->data == value) {
-                delete head;
-                head = NULL;
-            }
-            return;
-        }
-
-        if (head->data == value) {
             SNode* temp = head;
-
             while (temp->next != head)
                 temp = temp->next;
 
@@ -102,33 +59,28 @@ public:
             return;
         }
 
-        SNode* prev = head;
-        SNode* temp = head->next;
+        SNode* temp = head;
 
-        while (temp != head) {
-            if (temp->data == value) {
-                prev->next = temp->next;
-                delete temp;
-                return;
-            }
-
-            prev = temp;
+        while (temp->next != head && temp->next->name != name)
             temp = temp->next;
-        }
 
-        cout << "Student not found\n";
+        if (temp->next != head) {
+            SNode* del = temp->next;
+            temp->next = del->next;
+            delete del;
+        }
     }
 
     void display() {
         if (head == NULL) {
-            cout << "Empty\n";
+            cout << "Empty" << endl;
             return;
         }
 
         SNode* temp = head;
 
         do {
-            cout << temp->data << " ";
+            cout << temp->name << " ";
             temp = temp->next;
         } while (temp != head);
 
@@ -138,99 +90,51 @@ public:
 
 class DNode {
 public:
-    int data;
+    string name;
     DNode* next;
     DNode* prev;
 
-    DNode(int value) {
-        data = value;
+    DNode(string n) {
+        name = n;
         next = NULL;
         prev = NULL;
     }
 };
 
 class DoublyCircular {
+    DNode* head;
+
 public:
-    DNode* head = NULL;
+    DoublyCircular() {
+        head = NULL;
+    }
 
-    void insertBeginning(int value) {
-        DNode* newNode = new DNode(value);
+    void join(string name) {
+        DNode* newNode = new DNode(name);
 
         if (head == NULL) {
             head = newNode;
-            newNode->next = head;
-            newNode->prev = head;
+            head->next = head;
+            head->prev = head;
             return;
         }
 
-        DNode* last = head->prev;
+        DNode* tail = head->prev;
 
         newNode->next = head;
-        newNode->prev = last;
-
-        last->next = newNode;
-        head->prev = newNode;
-
-        head = newNode;
-    }
-
-    void insertEnd(int value) {
-        DNode* newNode = new DNode(value);
-
-        if (head == NULL) {
-            head = newNode;
-            newNode->next = head;
-            newNode->prev = head;
-            return;
-        }
-
-        DNode* last = head->prev;
-
-        newNode->next = head;
-        newNode->prev = last;
-
-        last->next = newNode;
+        newNode->prev = tail;
+        tail->next = newNode;
         head->prev = newNode;
     }
 
-    void insertAfter(int x, int value) {
-        if (head == NULL) {
-            cout << "Circle is empty\n";
+    void leave(string name) {
+        if (head == NULL)
             return;
-        }
 
         DNode* temp = head;
 
         do {
-            if (temp->data == x) {
-                DNode* newNode = new DNode(value);
-
-                newNode->next = temp->next;
-                newNode->prev = temp;
-
-                temp->next->prev = newNode;
-                temp->next = newNode;
-
-                return;
-            }
-
-            temp = temp->next;
-        } while (temp != head);
-
-        cout << "Student not found\n";
-    }
-
-    void removeStudent(int value) {
-        if (head == NULL) {
-            cout << "Circle is empty\n";
-            return;
-        }
-
-        DNode* temp = head;
-
-        do {
-            if (temp->data == value) {
-
+            if (temp->name == name) {
                 if (temp->next == temp) {
                     delete temp;
                     head = NULL;
@@ -249,20 +153,18 @@ public:
 
             temp = temp->next;
         } while (temp != head);
-
-        cout << "Student not found\n";
     }
 
     void display() {
         if (head == NULL) {
-            cout << "Empty\n";
+            cout << "Empty" << endl;
             return;
         }
 
         DNode* temp = head;
 
         do {
-            cout << temp->data << " ";
+            cout << temp->name << " ";
             temp = temp->next;
         } while (temp != head);
 
@@ -272,74 +174,32 @@ public:
 
 int main() {
     SinglyCircular s;
+
+    s.join("A");
+    s.display();
+
+    s.join("B");
+    s.display();
+
+    s.join("C");
+    s.display();
+
+    s.leave("B");
+    s.display();
+
     DoublyCircular d;
 
-    int choice, value, after;
+    d.join("A");
+    d.display();
 
-    while (true) {
-        cout << "\n1. Join Beginning\n";
-        cout << "2. Join End\n";
-        cout << "3. Join After\n";
-        cout << "4. Leave\n";
-        cout << "5. Display\n";
-        cout << "6. Exit\n";
+    d.join("B");
+    d.display();
 
-        cout << "Enter choice: ";
-        cin >> choice;
+    d.join("C");
+    d.display();
 
-        if (choice == 1) {
-            cin >> value;
-
-            s.insertBeginning(value);
-            d.insertBeginning(value);
-
-            s.display();
-            d.display();
-        }
-
-        else if (choice == 2) {
-            cin >> value;
-
-            s.insertEnd(value);
-            d.insertEnd(value);
-
-            s.display();
-            d.display();
-        }
-
-        else if (choice == 3) {
-            cin >> after >> value;
-
-            s.insertAfter(after, value);
-            d.insertAfter(after, value);
-
-            s.display();
-            d.display();
-        }
-
-        else if (choice == 4) {
-            cin >> value;
-
-            s.removeStudent(value);
-            d.removeStudent(value);
-
-            s.display();
-            d.display();
-        }
-
-        else if (choice == 5) {
-            s.display();
-            d.display();
-        }
-
-        else if (choice == 6) {
-            break;
-        }
-
-        else {
-            cout << "Invalid choice\n";
-        }
-    }
+    d.leave("B");
+    d.display();
 
     return 0;
 }
